@@ -1,0 +1,520 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "364abdf0-e227-4873-a08a-6edadfe51d67",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "from scipy import stats as stats\n",
+    "from scipy.stats import chi2_contingency\n",
+    "from scipy.stats import chi2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "b2c8de04-990a-4ddf-b5ff-1ed30357c355",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df = pd.read_csv('/Users/eshanakshata/Desktop/Costomer+OrderForm.csv')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "59f0e682-a6de-4081-aabe-43949334910f",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Phillippines</th>\n",
+       "      <th>Indonesia</th>\n",
+       "      <th>Malta</th>\n",
+       "      <th>India</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Defective</td>\n",
+       "      <td>Error Free</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Defective</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Defective</td>\n",
+       "      <td>Defective</td>\n",
+       "      <td>Error Free</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Defective</td>\n",
+       "      <td>Error Free</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>295</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>296</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>297</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Defective</td>\n",
+       "      <td>Error Free</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>298</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>299</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Defective</td>\n",
+       "      <td>Defective</td>\n",
+       "      <td>Error Free</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>300 rows × 4 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "    Phillippines   Indonesia       Malta       India\n",
+       "0     Error Free  Error Free   Defective  Error Free\n",
+       "1     Error Free  Error Free  Error Free   Defective\n",
+       "2     Error Free   Defective   Defective  Error Free\n",
+       "3     Error Free  Error Free  Error Free  Error Free\n",
+       "4     Error Free  Error Free   Defective  Error Free\n",
+       "..           ...         ...         ...         ...\n",
+       "295   Error Free  Error Free  Error Free  Error Free\n",
+       "296   Error Free  Error Free  Error Free  Error Free\n",
+       "297   Error Free  Error Free   Defective  Error Free\n",
+       "298   Error Free  Error Free  Error Free  Error Free\n",
+       "299   Error Free   Defective   Defective  Error Free\n",
+       "\n",
+       "[300 rows x 4 columns]"
+      ]
+     },
+     "execution_count": 29,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "08a0d96f-cfdb-4434-9030-7a86085645e9",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Phillippines</th>\n",
+       "      <th>Indonesia</th>\n",
+       "      <th>Malta</th>\n",
+       "      <th>India</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Defective</td>\n",
+       "      <td>Error Free</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Defective</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Defective</td>\n",
+       "      <td>Defective</td>\n",
+       "      <td>Error Free</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Error Free</td>\n",
+       "      <td>Defective</td>\n",
+       "      <td>Error Free</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "  Phillippines   Indonesia       Malta       India\n",
+       "0   Error Free  Error Free   Defective  Error Free\n",
+       "1   Error Free  Error Free  Error Free   Defective\n",
+       "2   Error Free   Defective   Defective  Error Free\n",
+       "3   Error Free  Error Free  Error Free  Error Free\n",
+       "4   Error Free  Error Free   Defective  Error Free"
+      ]
+     },
+     "execution_count": 30,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "id": "5477b16e-1380-4629-a835-470ee228bf4f",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Phillippines\n",
+      "Error Free    271\n",
+      "Defective      29\n",
+      "Name: count, dtype: int64 Indonesia\n",
+      "Error Free    267\n",
+      "Defective      33\n",
+      "Name: count, dtype: int64 Malta\n",
+      "Error Free    269\n",
+      "Defective      31\n",
+      "Name: count, dtype: int64 India\n",
+      "Error Free    280\n",
+      "Defective      20\n",
+      "Name: count, dtype: int64\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(df['Phillippines'].value_counts(),df['Indonesia'].value_counts(),df['Malta'].value_counts(),df['India'].value_counts())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "id": "8cd6c23b-ae59-4e53-80d6-7c835fe6c803",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "observed = ([[271,267,269,280],[29,33,31,20]])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "id": "f34f1ae2-d34c-4028-8829-b3e76b421081",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[[271, 267, 269, 280], [29, 33, 31, 20]]"
+      ]
+     },
+     "execution_count": 33,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "observed"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "id": "13011d6c-8510-46e0-b262-25706fa4cd01",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "stat, p, dof, expected = chi2_contingency([[271,267,269,280],[29,33,31,20]])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "id": "7a289b7e-f286-41dd-82a1-70a53e88f2bc",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "3.858960685820355"
+      ]
+     },
+     "execution_count": 36,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "stat"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "id": "474d6962-976f-41cd-b6f0-de7979b5cd25",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.2771020991233135"
+      ]
+     },
+     "execution_count": 37,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "p"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "id": "7c5a2140-84fa-4c73-81cf-ae8e832a004f",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "3"
+      ]
+     },
+     "execution_count": 38,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "dof"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "id": "3150f831-0823-4767-b1d1-d1947f6178c3",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[271.75, 271.75, 271.75, 271.75],\n",
+       "       [ 28.25,  28.25,  28.25,  28.25]])"
+      ]
+     },
+     "execution_count": 39,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "expected"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "id": "547d2fd2-6aac-457d-8a94-86d9a09c258f",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "dof=3\n",
+      "[[271.75 271.75 271.75 271.75]\n",
+      " [ 28.25  28.25  28.25  28.25]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "print('dof=%d' % dof)\n",
+    "print(expected)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "id": "6d5de871-8dda-4fc8-9520-bbb8b158832d",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "probability=0.950, critical=7.815, stat=3.859\n",
+      "Independent (fail to reject H0), variables are not related\n"
+     ]
+    }
+   ],
+   "source": [
+    "alpha = 0.05\n",
+    "prob=1-alpha\n",
+    "critical = chi2.ppf(prob, dof)\n",
+    "print('probability=%.3f, critical=%.3f, stat=%.3f' % (prob, critical, stat))\n",
+    "if abs(stat) >= critical:\n",
+    "\tprint('Dependent (reject H0),variables are related')\n",
+    "else:\n",
+    "\tprint('Independent (fail to reject H0), variables are not related')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "id": "c2bebba5-95b6-43c6-adcc-16dc83bfbbee",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "significance=0.050, p=0.277\n",
+      "Independent (fail to reject H0)\n"
+     ]
+    }
+   ],
+   "source": [
+    "print('significance=%.3f, p=%.3f' % (alpha, p))\n",
+    "if p <= alpha:\n",
+    "\tprint('Dependent (reject H0)')\n",
+    "else:\n",
+    "\tprint('Independent (fail to reject H0)')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c2e4462a-9faa-4d1d-8fe5-c1687f2d4b1c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#The test statistic (3.859) is less than the critical value (7.815), and \n",
+    "#the significance level (0.277) is greater than 0.05. Therefore, we fail to reject the null hypothesis in both cases. \n",
+    "#This indicates that the variables (center and defective percentage) are not related, \n",
+    "#and there is no significant association between the center and the defective percentage."
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.11.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
